@@ -1649,12 +1649,11 @@ install: install-static
 # Jni stuff
 # ---------------------------------------------------------------------------
 
-JAVA_HOME = /usr/lib/jvm/java-8-openjdk-amd64/
 JAVA_INCLUDE = -I$(JAVA_HOME)/include/ -I$(JAVA_HOME)/include/linux
 ifeq ($(PLATFORM), OS_SOLARIS)
 	ARCH := $(shell isainfo -b)
 else ifeq ($(PLATFORM), OS_OPENBSD)
-	ifneq (,$(filter $(MACHINE), amd64 arm64 sparc64))
+	ifneq (,$(filter $(MACHINE), amd64 arm64 aarch64 sparc64))
 		ARCH := 64
 	else
 		ARCH := 32
@@ -1663,7 +1662,7 @@ else
 	ARCH := $(shell getconf LONG_BIT)
 endif
 
-ifeq (,$(findstring ppc,$(MACHINE)))
+ifeq (,$(filter $(MACHINE), ppc arm64 aarch64 sparc64))
         ROCKSDBJNILIB = librocksdbjni-linux$(ARCH).so
 else
         ROCKSDBJNILIB = librocksdbjni-linux-$(MACHINE).so
